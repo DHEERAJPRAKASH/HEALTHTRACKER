@@ -4,7 +4,7 @@ var fetchuser = require("../middleware/fetchuser");
 const DetailUsers = require("../models/DetailUsers");
 const { body, validationResult } = require("express-validator");
 
-//ROUTE 1 - Logged in  user details retrieval using : GET "/api/auth/getuser.LOGIN REQUIRED
+//ROUTE 1 - Logged in  user details retrieval using : GET "/api/userdetails/getuser.LOGIN REQUIRED
 
 router.get("/fetchuserdetails", fetchuser, async (req, res) => {
   try {
@@ -17,7 +17,7 @@ router.get("/fetchuserdetails", fetchuser, async (req, res) => {
   }
 });
 
-//ROUTE 2 - Logged in  user details adding details : GET "/api/auth/adduser.LOGIN REQUIRED
+//ROUTE 2 - Logged in  user details adding details : GET "/api/userdetails/adduser.LOGIN REQUIRED
 router.post(
   "/adduser",
   fetchuser,
@@ -96,5 +96,94 @@ router.post(
     }
   }
 );
+
+//ROUTE 3 - Logged in  user details updating details : GET "/api/userdetails/updateuser.LOGIN REQUIRED
+router.put("/updateuser/:id", fetchuser, async (req, res) => {
+  const {
+    worknature,
+    exercisedaily,
+    eatingdiet,
+    alcoholconsumption,
+    caffeineconsumption,
+    smoking,
+    othercomments,
+    list_of_drug_allergies,
+    other_illnesses,
+    list_of_operations,
+    list_of_current_medications,
+  } = req.body;
+
+  try {
+    //Create a newUser object
+    const newUser = {};
+    //validate and check which field is available and update accordingly
+    if (worknature) {
+      newUser.worknature = worknature;
+    }
+
+    newUser.exercisedaily = exercisedaily;
+    newUser.eatingdiet = eatingdiet;
+    newUser.alcoholconsumption = alcoholconsumption;
+    newUser.caffeineconsumption = caffeineconsumption;
+    newUser.smoking = smoking;
+
+    if (othercomments) {
+      newUser.othercomments = othercomments;
+    }
+    if (list_of_drug_allergies) {
+      newUser.list_of_drug_allergies = list_of_drug_allergies;
+    }
+    if (other_illnesses) {
+      newUser.other_illnesses = other_illnesses;
+    }
+    if (list_of_operations) {
+      newUser.list_of_operations = list_of_operations;
+    }
+    if (list_of_current_medications) {
+      newUser.list_of_current_medications = list_of_current_medications;
+    }
+
+    //Find the userdetail to be updated and update it
+    //Always validate the user and update which is done below
+    let userupdate = await DetailUsers.findById(req.params.id);
+    if (!userupdate) {
+      return req.status(404).send("Not Found");
+    }
+
+    if (userupdate.user.toString() !== req.user.id) {
+      return req.status(401).send("Not Allowed");
+    }
+
+    userupdate = await DetailUsers.findByIdAndUpdate(
+      req.params.id,
+      { $set: newUser },
+      { new: true }
+    );
+    res.json({ userupdate });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//ROUTE 4 - Logged in  user details deleting details : GET "/api/userdetails/deleteuser.LOGIN REQUIRED
+router.delete("/deleteuser/:id", fetchuser, async (req, res) => {
+  try {
+    let userupdate = await DetailUsers.findById(req.params.id);
+    if (!userupdate) {
+      return req.status(404).send("Not Found");
+    }
+
+    if (userupdate.user.toString() !== req.user.id) {
+      return req.status(401).send("Not Allowed");
+    }
+
+    userupdate = await DetailUsers.findByIdAndDelete(req.params.id);
+    res.json({ Success: "Note has been deleted", userupdate: userupdate });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;
