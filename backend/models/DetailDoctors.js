@@ -2,16 +2,21 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const DetailDoctorSchema = new Schema({
-    dob:{
-        type: Date,
-        required: true
+
+    doctor:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'doctor'
     },
     experience:{
-        type: Number,
+        type: String,
         required: true
 
     },
     designation:{
+        type: String,
+        required: true
+    },
+    working:{
         type: String,
         required: true
     },

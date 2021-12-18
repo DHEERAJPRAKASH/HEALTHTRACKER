@@ -179,7 +179,7 @@ router.delete("/deleteuser/:id", fetchuser, async (req, res) => {
     }
 
     userupdate = await DetailUsers.findByIdAndDelete(req.params.id);
-    res.json({ Success: "Note has been deleted", userupdate: userupdate });
+    res.json({ Success: "User Details has been deleted", userupdate: userupdate });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
