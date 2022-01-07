@@ -11,7 +11,7 @@ app.use('/api/userdetails',require('./routes/userroute'));
 app.use('/api/doctordetails',require('./routes/doctorroute'));
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`HEALTH TRACKER BACKEND app listening at http://localhost:${port}`)
 })
 
 connectToMongo();
