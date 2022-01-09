@@ -6,7 +6,7 @@ import Doctor from "./pages/Doctor";
 import User from "./pages/User";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import UserState from "./context/Users/UserState";
+import UserState from "./context/Doctors/DoctorState";
 
 function App() {
   return (

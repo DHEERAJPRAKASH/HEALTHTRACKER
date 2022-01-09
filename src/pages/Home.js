@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from "react";
-import UserContext from "../context/Users/userContext";
+import User from "./User"
 
-function Home() {
+export const Home = ()=>{
   
   return (
     <div className="home">
       <h1>HOME</h1>
-      
+      <User></User>
     </div>
   );
 }

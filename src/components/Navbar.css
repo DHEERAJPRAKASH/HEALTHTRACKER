@@ -4,17 +4,22 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    padding-top:2.5px;
+    padding-bottom:3.5px;
+    flex-wrap:nowrap;
   }
-.navbar-title {
+
+  .navbar-title {
     background-color: #060b26;
-    color:white;
-    height: 60px;
+    color: white;
+    height: 50px;
+    width: 96%;
     display: flex;
-    padding: 2rem 42rem 1rem;
+    padding: 1rem 40rem 2rem;
     text-align: center;
     justify-content: start;
     align-items: center;
-  }
+}
   
   .menu-bars {
     margin-left: 2rem;
