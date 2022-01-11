@@ -3,6 +3,38 @@ const router = express.Router();
 var fetchuser = require("../middleware/fetchuser");
 const DetailUsers = require("../models/DetailUsers");
 const { body, validationResult } = require("express-validator");
+const multer = require("multer");
+//the below gives a separate folder for saving images
+
+
+const storage = multer.diskStorage({
+  destination: function(req,file,cb){
+    cb(null,'./uploads/');
+  },
+  filename: function(req,file,cb){
+    // cb(null,new Date().toISOString + file.originalname);
+    cb(null,file.originalname);
+    // cb(null, file.fieldname + '_' + Date.now() 
+    //          + path.extname(file.originalname))
+  }
+})
+
+const fileFilter = (req,file,cb) =>{
+  //reject a file 
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+    cb(null,true);
+  }
+  else{
+    cb(null,false);
+  }
+}
+const upload = multer({
+  storage : storage, 
+  limits : {
+    fileSize : 1024 * 1024 * 5
+  },
+  fileFilter : fileFilter
+});
 
 //ROUTE 1 - Logged in  user details retrieval using : GET "/api/userdetails/getuser.LOGIN REQUIRED
 
@@ -20,7 +52,7 @@ router.get("/fetchuserdetails", fetchuser, async (req, res) => {
 //ROUTE 2 - Logged in  user details adding details : GET "/api/userdetails/adduser.LOGIN REQUIRED
 router.post(
   "/adduser",
-  fetchuser,
+  fetchuser,upload.single('userImage'),
   [
     // body("dob", "Enter a valid DateofBirth").isDate(),
     body("worknature", "Enter a valid worknature").isLength({ min: 4 }),
@@ -50,9 +82,13 @@ router.post(
       "list_of_current_medications",
       "Enter a valid list_of_current_medications"
     ).isLength({ min: 3 }),
+    // added on 10/01/2022
+    // upload.single('userImage')
   ],
   async (req, res) => {
     try {
+      // added on 10/01/2022
+      
       const {
         worknature,
         exercisedaily,
@@ -69,6 +105,7 @@ router.post(
       //if there are errors, return bad request
       const errors = validationResult(req);
 
+      console.log("hai "+req.file);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
@@ -85,6 +122,7 @@ router.post(
         other_illnesses,
         list_of_operations,
         list_of_current_medications,
+        userImage : req.file.path,
       });
 
       const savedUser = await userdet.save();

@@ -18,6 +18,23 @@ const DoctorState = (props)=>{
         "list_of_current_medications": "nothing",
         "date": "2021-12-18T08:00:00.516Z",
         "__v": 0
+      },
+      {
+        "_id": "61bd9500954e1bce995dc88c",
+        "user": "61b83d14573bc84cac1a67b4",
+        "worknature": "overheated",
+        "exercisedaily": true,
+        "eatingdiet": true,
+        "alcoholconsumption": false,
+        "caffeineconsumption": false,
+        "smoking": false,
+        "othercomments": "No comments",
+        "list_of_drug_allergies": "nothing",
+        "other_illnesses": "1.wheezing,2.cold",
+        "list_of_operations": "nothing",
+        "list_of_current_medications": "nothing",
+        "date": "2021-12-18T08:00:00.516Z",
+        "__v": 0
       }
     ]
     const [doctor, setdoctor] = useState(doctorInitial)

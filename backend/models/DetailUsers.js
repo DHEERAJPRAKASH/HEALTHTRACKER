@@ -55,6 +55,10 @@ const DetailUserSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    userImage:{ 
+        type: String, 
+        required: true 
+    }
 });
 
 module.exports = mongoose.model('detailuser',DetailUserSchema);

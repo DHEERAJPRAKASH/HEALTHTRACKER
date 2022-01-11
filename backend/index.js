@@ -4,7 +4,16 @@ const express = require('express')
 const app = express()
 const port = 5000
 
+// added on 09/01/2022
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose')
+  
+var fs = require('fs');
+var path = require('path');
+require('dotenv/config');
+//end of that date
 app.use(express.json())
+app.use('/uploads',express.static('uploads'));
 //Available Routes
 app.use('/api/auth',require('./routes/auth'));
 app.use('/api/userdetails',require('./routes/userroute'));
