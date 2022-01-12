@@ -18,11 +18,11 @@ function Navbar() {
   return (
     <div>
       <IconContext.Provider value={{ color: '#fff' }}>
-        <div className='navbar'>
+        <div className='navbar' style={{flexWrap:'nowrap'}}>
           <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
-          <h1 className='navbar-title'>HEALTH TRACKER</h1>
+          <h3 className='navbar-title'>HEALTH TRACKER</h3>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>

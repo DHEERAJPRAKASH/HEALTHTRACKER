@@ -6,12 +6,12 @@ import Doctor from "./pages/Doctor";
 import User from "./pages/User";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import UserState from "./context/Doctors/DoctorState";
+import DoctorState from "./context/Doctors/DoctorState";
 
 function App() {
   return (
     <div className="App">
-      <UserState>
+      <DoctorState>
         <Router>
           <Navbar />
           <Switch>
@@ -23,7 +23,7 @@ function App() {
             <Route path="/signup" component={Signup} />
           </Switch>
         </Router>
-      </UserState>
+      </DoctorState>
     </div>
   );
 }

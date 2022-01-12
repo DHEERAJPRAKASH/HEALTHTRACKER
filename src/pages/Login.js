@@ -4,7 +4,6 @@ import avatar from "./avatar.svg";
 import bg from "./bg.svg";
 import "../components/Login.css";
 
-
 function Login() {
   return (
     <div>
@@ -54,7 +53,6 @@ function Login() {
             </form>
           </div>
         </div>
-        
       </body>
     </div>
   );

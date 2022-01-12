@@ -1,11 +1,10 @@
 import User from "./User"
-
+import DoctorRegister from "./DoctorRegister"
 export const Home = ()=>{
   
   return (
     <div className="home">
-      <h1>HOME</h1>
-      <User></User>
+      <DoctorRegister></DoctorRegister>
     </div>
   );
 }

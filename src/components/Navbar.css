@@ -15,9 +15,9 @@
     height: 50px;
     width: 96%;
     display: flex;
-    padding: 1rem 40rem 2rem;
+    padding: 3.2rem 37rem 1rem;
     text-align: center;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
   
@@ -85,3 +85,4 @@
   span {
     margin-left: 16px;
   }
+

@@ -1,49 +1,45 @@
-import {useState} from "react";
+import { useState } from "react";
 import DoctorContext from "./DoctorContext";
 
-const DoctorState = (props)=>{
-    const doctorInitial = [{
-        "_id": "61bd9500954e1bce995dc88c",
-        "user": "61b83d14573bc84cac1a67b4",
-        "worknature": "overheated",
-        "exercisedaily": true,
-        "eatingdiet": true,
-        "alcoholconsumption": false,
-        "caffeineconsumption": false,
-        "smoking": false,
-        "othercomments": "No comments",
-        "list_of_drug_allergies": "nothing",
-        "other_illnesses": "1.wheezing,2.cold",
-        "list_of_operations": "nothing",
-        "list_of_current_medications": "nothing",
-        "date": "2021-12-18T08:00:00.516Z",
-        "__v": 0
-      },
-      {
-        "_id": "61bd9500954e1bce995dc88c",
-        "user": "61b83d14573bc84cac1a67b4",
-        "worknature": "overheated",
-        "exercisedaily": true,
-        "eatingdiet": true,
-        "alcoholconsumption": false,
-        "caffeineconsumption": false,
-        "smoking": false,
-        "othercomments": "No comments",
-        "list_of_drug_allergies": "nothing",
-        "other_illnesses": "1.wheezing,2.cold",
-        "list_of_operations": "nothing",
-        "list_of_current_medications": "nothing",
-        "date": "2021-12-18T08:00:00.516Z",
-        "__v": 0
-      }
-    ]
-    const [doctor, setdoctor] = useState(doctorInitial)
+const DoctorState = (props) => {
+  const doctorInitial = [
+    {
+      experience: "2 years",
+      designation: "MD DOCTOR",
+      working: "SRM UNIVERSITY",
+      __v: 0,
+    },
+  ];
+  const [doctor, setdoctor] = useState(doctorInitial);
+  // const [doctor, setdoctor] = useState(0);
 
-    return(
-        <DoctorContext.Provider value={{doctor,setdoctor}}>
-        {props.children}</DoctorContext.Provider>
-    )
-}
+  // Add Doctor
+  const addDoctor = (experience, designation, working) => {
+    console.log("Adding Doctor");
+
+    const doc = {
+      experience: experience,
+      designation: designation,
+      working: working,
+      __v: 0,
+    };
+    console.log("before:"+experience);
+    setdoctor(doctor.concat(doc));
+    console.log(doctor);
+  };
+  // Delete a Doctor
+  const deleteDoctor = () => {};
+  // Edit Doctor
+  const editDoctor = () => {};
+
+  return (
+    <DoctorContext.Provider
+      value={{ doctor,addDoctor, deleteDoctor, editDoctor }}
+    >
+      {props.children}
+    </DoctorContext.Provider>
+  );
+};
 
 export default DoctorState;
 
