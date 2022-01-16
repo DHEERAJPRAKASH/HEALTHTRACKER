@@ -1,13 +1,13 @@
 import { useState} from "react";
-import DoctorContext from "./DoctorContext";
+import UserContext from "./UserContext";
 import axios from "axios";
 
-const DoctorState = (props) => {
+const UserState = (props) => {
   const host = "http://localhost:5000";
-  const doctorInitial = [];
-  const [doctor, setdoctor] = useState(doctorInitial);
+  const userInitial = [];
+  const [user, setuser] = useState(userInitial);
   
-  const getDoctor = async () => {
+  const getUser = async () => {
     {
       let url = "http://localhost:5000/api/doctordetails/fetchdoctordetails";
       let options = {
@@ -26,14 +26,14 @@ const DoctorState = (props) => {
         response && response.status === 200 && response.statusText === "OK";
       if (responseOK) {
         let data = await response.data;
-        setdoctor(...data);
+        setuser(...data);
       }
     };
   };
 
   // Add Doctor
   
-  const addDoctor = async (experience, designation, working) => {
+  const addUser = async (experience, designation, working) => {
     let url = "http://localhost:5000/api/doctordetails/adddoctor";
     let options = {
       method: "POST",
@@ -55,12 +55,12 @@ const DoctorState = (props) => {
       response && response.status === 200 && response.statusText === "OK";
     if (responseOK) {
       let data = await response.data;
-      setdoctor(doctor.concat(data));
+      setuser(doctor.concat(data));
     }
   };
 
   // Delete a Doctor
-  const deleteDoctor = async (id) => {
+  const deleteUser = async (id) => {
     {
       let url = `${host}/api/doctordetails/deletedoctor/${id}`;
       let options = {
@@ -81,12 +81,12 @@ const DoctorState = (props) => {
         const newDoctor = doctor.filter((doc) => {
             return doc._id !== id;
           });
-        setdoctor(newDoctor);
+        setuser(newDoctor);
       }
     };
   };
   // Edit Doctor
-  const editDoctor = async (id, experience, designation, working) => {
+  const editUser = async (id, experience, designation, working) => {
     
     let url = `${host}/api/doctordetails/updatedoctor/${id}`;
     let options = {
@@ -110,9 +110,6 @@ const DoctorState = (props) => {
       response && response.status === 200 && response.statusText === "OK";
     if (responseOK) {
       let data = await response.data;
-      // do something with data
-      data1=data;
-      // setdoctor(doctor);
     }
     
     for (let i = 0; i < doctor.length; i++) {
@@ -124,20 +121,20 @@ const DoctorState = (props) => {
       }
     }
     console.log(data1);
-    setdoctor(doctor);
+    setuser(user);
     
   };
 
   return (
-    <DoctorContext.Provider
-      value={{ doctor, getDoctor, addDoctor, deleteDoctor, editDoctor }}
+    <UserContext.Provider
+      value={{ user, getUser, addUser, deleteUser, editUser }}
     >
       {props.children}
-    </DoctorContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export default DoctorState;
+export default UserState;
 
 // value in provider is like {{state1,update_function1},{state2,update_function2},...etc}
 // <UserContext.Provider value={{state,update}}>
