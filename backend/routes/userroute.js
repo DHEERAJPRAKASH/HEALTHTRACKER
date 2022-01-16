@@ -42,12 +42,51 @@ router.get("/fetchuserdetails", fetchuser, async (req, res) => {
   try {
     const detailuser = await DetailUsers.find({ user: req.user.id });
 
+    console.log(detailuser);
     res.json([detailuser]);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 });
+
+// router.get("/fetchuserdetails", (req, res, next) => {
+//   DetailUsers.find({ user: req.user.id })
+//     .select("worknature exercisedaily eatingdiet alcoholconsumption caffeineconsumption smoking othercomments list_of_drug_allergies other_illnesses list_of_operations list_of_current_medications userImage _id")
+//     .exec()
+//     .then(docs => {
+//       const response = {
+//         count: docs.length,
+//         doctor: docs.map(doc => {
+//           return {
+//             worknature: doc.worknature,
+//             exercisedaily: doc.exercisedaily,
+//             eatingdiet: doc.eatingdiet,
+//             alcoholconsumption : doc.alcoholconsumption,
+//             productImage: doc.productImage,
+//             _id: doc._id,
+//             request: {
+//               type: "GET",
+//               url: "http://localhost:3000/products/" + doc._id
+//             }
+//           };
+//         })
+//       };
+//       //   if (docs.length >= 0) {
+//       res.status(200).json(response);
+//       //   } else {
+//       //       res.status(404).json({
+//       //           message: 'No entries found'
+//       //       });
+//       //   }
+//     })
+//     .catch(err => {
+//       console.log(err);
+//       res.status(500).json({
+//         error: err
+//       });
+//     });
+// });
 
 //ROUTE 2 - Logged in  user details adding details : GET "/api/userdetails/adduser.LOGIN REQUIRED
 router.post(

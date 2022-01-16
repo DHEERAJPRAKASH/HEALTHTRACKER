@@ -1,40 +1,109 @@
 import { useState } from "react";
 import DoctorContext from "./DoctorContext";
+import axios from "axios";
 
 const DoctorState = (props) => {
-  const doctorInitial = [
-    {
-      experience: "2 years",
-      designation: "MD DOCTOR",
-      working: "SRM UNIVERSITY",
-      __v: 0,
-    },
-  ];
+  const host = "http://localhost:5000";
+  const doctorInitial = [];
   const [doctor, setdoctor] = useState(doctorInitial);
   // const [doctor, setdoctor] = useState(0);
 
-  // Add Doctor
-  const addDoctor = (experience, designation, working) => {
-    console.log("Adding Doctor");
-
-    const doc = {
-      experience: experience,
-      designation: designation,
-      working: working,
-      __v: 0,
-    };
-    console.log("before:"+experience);
-    setdoctor(doctor.concat(doc));
-    console.log(doctor);
+  const getDoctor = async () => {
+    const response = await fetch(
+      `${host}/api/doctordetails/fetchdoctordetails`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Accept':'application/json',
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiZGViMGE0MjViYmY3NDI5YzM1YzI4In0sImlhdCI6MTYzOTgzNjQyN30.cMieELl22cHSIdKXyINrlU8g-uQweTqfCEy7-gXMQUA",
+        },
+      }
+    );
+    const Json = await response.json();
+    console.log(Json);
+    setdoctor(...Json);
   };
+
+  // Add Doctor
+  
+  const addDoctor = async (experience, designation, working) => {
+    let url = "http://localhost:5000/api/doctordetails/adddoctor";
+    let options = {
+      method: "POST",
+      url: url,
+      headers: {
+        // Accept: "application/json",
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiZGViMGE0MjViYmY3NDI5YzM1YzI4In0sImlhdCI6MTYzOTgzNjQyN30.cMieELl22cHSIdKXyINrlU8g-uQweTqfCEy7-gXMQUA",
+      },
+      data: {
+        experience: experience,
+        designation: designation,
+        working: working,
+      },
+    };
+    let response = await axios(options);
+    let responseOK =
+      response && response.status === 200 && response.statusText === "OK";
+    if (responseOK) {
+      let data = await response.data;
+      // do something with data
+      setdoctor(doctor.concat(data));
+    }
+  };
+
   // Delete a Doctor
-  const deleteDoctor = () => {};
+  const deleteDoctor = async (id) => {
+    const response = await fetch(
+      `${host}/api/doctordetails/deletedoctor/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiZGViMGE0MjViYmY3NDI5YzM1YzI4In0sImlhdCI6MTYzOTgzNjQyN30.cMieELl22cHSIdKXyINrlU8g-uQweTqfCEy7-gXMQUA",
+        },
+      }
+    );
+    const Json = response.json();
+    console.log("Deleting the note with id:" + id);
+    const newDoctor = doctor.filter((doc) => {
+      return doc._id !== id;
+    });
+    setdoctor(newDoctor);
+  };
   // Edit Doctor
-  const editDoctor = () => {};
+  const editDoctor = async (id, experience, designation, working) => {
+    const response = await fetch(
+      `${host}/api/doctordetails/updatedoctor/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiZGViMGE0MjViYmY3NDI5YzM1YzI4In0sImlhdCI6MTYzOTgzNjQyN30.cMieELl22cHSIdKXyINrlU8g-uQweTqfCEy7-gXMQUA",
+        },
+        body: JSON.stringify({ experience, designation, working }),
+      }
+    );
+    const json = response.json();
+
+    for (let i = 0; i < doctor.length; i++) {
+      const element = doctor[i];
+      if (element._id == id) {
+        element.experience = experience;
+        element.designation = designation;
+        element.working = working;
+      }
+    }
+  };
 
   return (
     <DoctorContext.Provider
-      value={{ doctor,addDoctor, deleteDoctor, editDoctor }}
+      value={{ doctor, getDoctor, addDoctor, deleteDoctor, editDoctor }}
     >
       {props.children}
     </DoctorContext.Provider>

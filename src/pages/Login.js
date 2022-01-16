@@ -18,14 +18,14 @@ function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <img className="wave" src={wave} />
+        <img className="wave" src={wave} alt="hai" />
         <div className="container">
           <div className="img">
-            <img src={bg} />
+            <img src={bg} alt="hai" />
           </div>
           <div className="login-content">
             <form action="index.html">
-              <img src={avatar} />
+              <img src={avatar} alt="hai"/>
               <h2 className="title">Welcome</h2>
               <div className="input-div one">
                 <div className="i">

@@ -1,4 +1,4 @@
-import User from "./User"
+// import User from "./User"
 import DoctorRegister from "./DoctorRegister"
 export const Home = ()=>{
   
