@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 var fetchuser = require("../middleware/fetchuser");
 const DetailUsers = require("../models/DetailUsers");
+const UploadUsers = require("../models/UploadDetail");
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 //the below gives a separate folder for saving images
-
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function(req,file,cb){
@@ -14,6 +15,8 @@ const storage = multer.diskStorage({
   filename: function(req,file,cb){
     // cb(null,new Date().toISOString + file.originalname);
     cb(null,file.originalname);
+    console.log("Inside multer storage")
+    // return file;
     // cb(null, file.fieldname + '_' + Date.now() 
     //          + path.extname(file.originalname))
   }
@@ -35,6 +38,7 @@ const upload = multer({
   },
   fileFilter : fileFilter
 });
+// upload = multer({storage:storage})
 
 //ROUTE 1 - Logged in  user details retrieval using : GET "/api/userdetails/getuser.LOGIN REQUIRED
 
@@ -50,48 +54,12 @@ router.get("/fetchuserdetails", fetchuser, async (req, res) => {
   }
 });
 
-// router.get("/fetchuserdetails", (req, res, next) => {
-//   DetailUsers.find({ user: req.user.id })
-//     .select("worknature exercisedaily eatingdiet alcoholconsumption caffeineconsumption smoking othercomments list_of_drug_allergies other_illnesses list_of_operations list_of_current_medications userImage _id")
-//     .exec()
-//     .then(docs => {
-//       const response = {
-//         count: docs.length,
-//         doctor: docs.map(doc => {
-//           return {
-//             worknature: doc.worknature,
-//             exercisedaily: doc.exercisedaily,
-//             eatingdiet: doc.eatingdiet,
-//             alcoholconsumption : doc.alcoholconsumption,
-//             productImage: doc.productImage,
-//             _id: doc._id,
-//             request: {
-//               type: "GET",
-//               url: "http://localhost:3000/products/" + doc._id
-//             }
-//           };
-//         })
-//       };
-//       //   if (docs.length >= 0) {
-//       res.status(200).json(response);
-//       //   } else {
-//       //       res.status(404).json({
-//       //           message: 'No entries found'
-//       //       });
-//       //   }
-//     })
-//     .catch(err => {
-//       console.log(err);
-//       res.status(500).json({
-//         error: err
-//       });
-//     });
-// });
 
 //ROUTE 2 - Logged in  user details adding details : GET "/api/userdetails/adduser.LOGIN REQUIRED
 router.post(
   "/adduser",
-  fetchuser,upload.single('userImage'),
+  fetchuser,
+  // upload.single('userImage'),
   [
     // body("dob", "Enter a valid DateofBirth").isDate(),
     body("worknature", "Enter a valid worknature").isLength({ min: 4 }),
@@ -140,11 +108,18 @@ router.post(
         other_illnesses,
         list_of_operations,
         list_of_current_medications,
+        // userImage
       } = req.body;
       //if there are errors, return bad request
       const errors = validationResult(req);
+      const {data, mimetype}=req.files.userImage;
+      console.log(req.body.smoking)
+      // console.log("data:"+data);
+      console.log("mimetype:"+mimetype);
+      console.log("fresher")
+      console.log("image:"+req.files.userImage);
 
-      console.log("hai "+req.file);
+      console.log("path of file: "+req.files.userImage.path);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
@@ -161,10 +136,21 @@ router.post(
         other_illnesses,
         list_of_operations,
         list_of_current_medications,
-        userImage : req.file.path,
+        userImage : req.files.userImage.name,
+        // userImage : req.file.originalname,
       });
 
+      
+      console.log("name:"+req.files.userImage.name)
+      
+      // let path = req.files.userImage.name;
+      // userdet.userImage.data = fs.readFileSync(path);
+      // userdet.userImage.contentType = 'image/jpeg'
+      
+      // upload.single(req.files.userImage);
       const savedUser = await userdet.save();
+      console.log("saved user"+savedUser);
+
 
       res.json([savedUser]);
     } catch (error) {
@@ -263,4 +249,118 @@ router.delete("/deleteuser/:id", fetchuser, async (req, res) => {
   }
 });
 
+//Route to upload details to doctor
+router.post(
+  "/uploadDetail",
+  fetchuser,
+  // upload.single('userImage'),
+  [
+    // body("dob", "Enter a valid DateofBirth").isDate(),
+    body("worknature", "Enter a valid worknature").isLength({ min: 4 }),
+    body("exercisedaily", "Enter a valid value for exercise daily").isBoolean(),
+    body("eatingdiet", "Enter a valid value for eating diet").isBoolean(),
+    body(
+      "alcoholconsumption",
+      "Enter a valid value for alcoholconsumption"
+    ).isBoolean(),
+    body(
+      "caffeineconsumption",
+      "Enter a valid value for caffeineconsumption"
+    ).isBoolean(),
+    body("smoking", "Enter a valid value for smoking").isBoolean(),
+    body("othercomments", "Enter a valid othercomments").isLength({ min: 3 }),
+    body(
+      "list_of_drug_allergies",
+      "Enter a valid list_of_drug_allergies"
+    ).isLength({ min: 3 }),
+    body("other_illnesses", "Enter a valid other_illnesses").isLength({
+      min: 3,
+    }),
+    body("list_of_operations", "Enter a valid list_of_operations").isLength({
+      min: 3,
+    }),
+    body(
+      "list_of_current_medications",
+      "Enter a valid list_of_current_medications"
+    ).isLength({ min: 3 }),
+    // added on 10/01/2022
+    // upload.single('userImage')
+  ],
+  async (req, res) => {
+    try {
+      // added on 10/01/2022
+      
+      const {
+        doctor,
+        worknature,
+        exercisedaily,
+        eatingdiet,
+        alcoholconsumption,
+        caffeineconsumption,
+        smoking,
+        othercomments,
+        list_of_drug_allergies,
+        other_illnesses,
+        list_of_operations,
+        list_of_current_medications,
+        complaint,
+        doctorComments
+        // userImage
+      } = req.body;
+      //if there are errors, return bad request
+      const errors = validationResult(req);
+      // const {data, mimetype}=req.files.userImage;
+      console.log(req.body.smoking)
+      
+
+      // console.log("path of file: "+req.files.userImage.path);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const userdet = new UploadUsers({
+        user: req.user.id,
+        doctor,
+        worknature,
+        exercisedaily,
+        eatingdiet,
+        alcoholconsumption,
+        caffeineconsumption,
+        smoking,
+        othercomments,
+        list_of_drug_allergies,
+        other_illnesses,
+        list_of_operations,
+        list_of_current_medications,
+        complaint,
+        doctorComments
+      });
+
+      
+     
+      
+      // upload.single(req.files.userImage);
+      const savedUser = await userdet.save();
+      console.log("saved user"+savedUser);
+
+
+      res.json([savedUser]);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+//Route to fetch details about a single user
+// router.get("/fetchuserdetails/:id", fetchuser, async (req, res) => {
+//   try {
+//     const detailuser = await DetailUsers.find({ user: req.user.id });
+
+//     console.log(detailuser);
+//     res.json([detailuser]);
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 module.exports = router;

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const DetailUserSchema = new Schema({
+const UploadDetailSchema = new Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'user'
+    },
+    doctor:{
+        type:String,
+        required:true
     },
     worknature:{
         type: String,
@@ -51,18 +55,21 @@ const DetailUserSchema = new Schema({
         type: String,
         required: true
     },
+    complaint:{
+        type:String,
+        default: ""
+    },
+    doctorComments:{
+        type: String,
+        // required:true,
+        default:""
+    },
     date:{
         type: Date,
         default: Date.now
     },
-    userImage:{ 
-        type: String, 
-        required: true 
-    }
-    // userImage:{
-    //     data: Buffer,
-    //     contentType:String,
-    // }
+    
+    
 });
 
-module.exports = mongoose.model('detailuser',DetailUserSchema);
+module.exports = mongoose.model('uploaduser',UploadDetailSchema);

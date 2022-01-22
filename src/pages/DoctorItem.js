@@ -1,12 +1,18 @@
 import React, { useContext } from "react";
 import { Card, Button, Col } from "react-bootstrap";
-import DoctorContext from "../context/Doctors/DoctorContext";
+import DocUserContext from "../context/DocUserContext";
+import { useHistory } from "react-router-dom";
+import UserRegister from "./UserRegister";
 function DoctorItem(props) {
   const { doctor, updateDoctor } = props;
-  const context = useContext(DoctorContext);
+  const context = useContext(DocUserContext);
   const { deleteDoctor } = context;
-  
-
+  let history = useHistory();
+  const handleConsult = (e)=>{
+    const a = sessionStorage.setItem('doctorId',doctor._id);
+    console.log(a);
+  }
+ 
   return (
     <div className="col-3">
       <Col>
@@ -25,6 +31,9 @@ function DoctorItem(props) {
             </Button>
             <Button variant="success" onClick={()=>{updateDoctor(doctor)}}>
               UPDATE
+            </Button>
+            <Button variant="primary"  onClick={handleConsult}>
+              CONSULT
             </Button>
           </Card.Body>
         </Card>

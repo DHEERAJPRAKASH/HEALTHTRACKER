@@ -1,16 +1,22 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import DoctorContext from "../context/Doctors/DoctorContext";
-import { Button, Modal,Form} from "react-bootstrap";
-
+import DocUserContext from "../context/DocUserContext";
+import { Button, Modal, Form } from "react-bootstrap";
+import { useHistory } from "react-router";
 import DoctorItem from "./DoctorItem";
+import DoctorConsult from "./DoctorConsult";
 import { Container, Row } from "react-bootstrap";
 
 import DoctorRegister from "./DoctorRegister";
 function Doctor() {
-  const context = useContext(DoctorContext);
-  const { doctor, getDoctor, editDoctor } = context;
+  const context = useContext(DocUserContext);
+  let history = useHistory();
+  const { doctorComments } = context;
   useEffect(() => {
-    getDoctor();
+    if (localStorage.getItem("token")) {
+      // getDoctor();
+    } else {
+      history.push("/login");
+    }
     // eslint-disable-next-line
   }, []);
   const [show, setShow] = useState(false);
@@ -18,7 +24,7 @@ function Doctor() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const reload=()=>window.location.reload();
+  const reload = () => window.location.reload();
 
   const ref = useRef(null);
   const refClose = useRef(null);
@@ -28,38 +34,64 @@ function Doctor() {
     edesignation: "",
     eworking: "",
   });
+  const [user, setUser] = useState("");
 
-  const updateDoctor = (currentdoctor) => {
+  const updateUser = (id, currentDoctor) => {
     ref.current.click();
-    setDoctor({
-      id: currentdoctor._id,
-      eexperience: currentdoctor.experience,
-      edesignation: currentdoctor.designation,
-      eworking: currentdoctor.working,
-    });
+    console.log("id in updateUser:" + id);
   };
-
-  const handleClick = (e) => {
-    editDoctor(
-      doctors.id,
-      doctors.eexperience,
-      doctors.edesignation,
-      doctors.eworking
+  const handleSubmit = (id, currentUser) => {
+    console.log(currentUser);
+    console.log("user:" + user);
+    const userId = id;
+    console.log("userId:"+userId);
+    const formData = new FormData();
+    formData.append("worknature", currentUser.worknature);
+    formData.append("exercisedaily", currentUser.exercisedaily);
+    formData.append("eatingdiet", currentUser.eatingdiet);
+    formData.append("alcoholconsumption", currentUser.alcoholconsumption);
+    formData.append("caffeineconsumption", currentUser.caffeineconsumption);
+    formData.append("smoking", currentUser.smoking);
+    formData.append("othercomments", currentUser.othercomments);
+    formData.append(
+      "list_of_drug_allergies",
+      currentUser.list_of_drug_allergies
     );
-    refClose.current.click();
-    
+    formData.append("other_illnesses", currentUser.other_illnesses);
+    formData.append("list_of_operations", currentUser.list_of_operations);
+    formData.append(
+      "list_of_current_medications",
+      currentUser.list_of_current_medications
+    );
+    formData.append("doctor", currentUser.doctor);
+    formData.append("complaint", currentUser.complaint);
+    formData.append("doctorComments", user);
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    doctorComments(userId, formData)
   };
 
+  // const onChange = (e) => {
+  //   setDoctor({ ...doctors, [e.target.name]: e.target.value });
+  // };
   const onChange = (e) => {
-    setDoctor({ ...doctors, [e.target.name]: e.target.value });
+    setUser(e.target.value);
+    console.log(user);
   };
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "600px" }}>
+    <div style={{ overflowY: "scroll", maxHeight: "auto" }}>
       <Container fluid="md">
         <h1>DOCTORS</h1>
 
-        <Button ref={ref} variant="primary" onClick={handleShow} style={{ display: "none" }}>
+        <Button
+          ref={ref}
+          variant="primary"
+          onClick={handleShow}
+          style={{ display: "" }}
+        >
           Launch static backdrop modal
         </Button>
 
@@ -76,42 +108,41 @@ function Doctor() {
           <Modal.Body>
             Update your Profile if there is any changes has to be performed.
             <Form.Group className="mb-3">
-              <Form.Label style={{fontWeight: "bold"}}>Experience:</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>
+                Experience:
+              </Form.Label>
 
-              <Form.Control id="eexperience"
-              name="eexperience"
-              value={doctors.eexperience}
-              onChange={onChange}
-              placeholder="Experience" />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label style={{fontWeight: "bold"}}>Designation:</Form.Label>
-              <Form.Control id="edesignation"
-              name="edesignation"
-              value={doctors.edesignation}
-              onChange={onChange}placeholder="Designation"  />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label style={{fontWeight: "bold"}}>Working:</Form.Label>
-              <Form.Control id="eworking"
-              name="eworking"
-              value={doctors.eworking}
-              onChange={onChange}placeholder="Working"  />
+              <Form.Control
+                id="doctorComments"
+                name="doctorComments"
+                // value={user}
+                onChange={onChange}
+                placeholder="Docotor Comments"
+              />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button ref={refClose} variant="secondary" onClick={handleClose}>
-              Close
+            <Button ref={refClose} variant="primary" onClick={handleClose}>
+              OK
             </Button>
-            <Button variant="primary" 
-            disabled={doctors.eexperience.length<3 || doctors.edesignation.length<5}
-            onClick={handleClick}>
-              UPDATE
-            </Button>
+            <Button onClick={handleSubmit}>Submit</Button>
           </Modal.Footer>
         </Modal>
-        <Row>
+
+        <DoctorConsult
+          updateUser={updateUser}
+          handleSubmit={handleSubmit}
+        ></DoctorConsult>
+
+        <DoctorRegister></DoctorRegister>
+      </Container>
+    </div>
+  );
+}
+
+export default Doctor;
+
+/* <Row>
           {doctor.map((doc) => {
             return (
               <DoctorItem
@@ -121,12 +152,4 @@ function Doctor() {
               />
             );
           })}
-        </Row>
-
-        <DoctorRegister></DoctorRegister>
-      </Container>
-    </div>
-  );
-}
-
-export default Doctor;
+        </Row> */

@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import avatar from "./avatar.svg";
 import "../components/DoctorRegister.css";
-import DoctorContext from "../context/Doctors/DoctorContext";
-// import DoctorState from "../context/Doctors/DoctorState"
+import DocUserContext from "../context/DocUserContext";
 
 const DoctorRegister = () => {
-  const context = useContext(DoctorContext);
+  const context = useContext(DocUserContext);
   const { addDoctor } = context;
 
   const [docReg, setdocReg] = useState({
@@ -16,19 +15,17 @@ const DoctorRegister = () => {
   const handleClick = (e) => {
     e.preventDefault();
     addDoctor(docReg.experience, docReg.designation, docReg.working);
-    console.log(docReg.experience)
+    console.log(docReg.experience);
   };
   const onChange = (e) => {
     setdocReg({ ...docReg, [e.target.name]: e.target.value });
   };
   return (
     <div>
-      
-
-      <div className="container" style={{ padding: "2rem 30rem 2rem" }}>
+      <div className="container" style={{ padding: "2rem 30rem 2rem"}}>
         <div className="register-content">
           <form action="index.html">
-            <img src={avatar} alt="hai"/>
+            <img src={avatar} alt="hai" />
             <h2 className="title">REGISTRATION</h2>
             <div className="input-div one">
               <div className="i">
