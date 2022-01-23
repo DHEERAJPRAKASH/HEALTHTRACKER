@@ -2,19 +2,24 @@ import React, { useContext, useState } from "react";
 import avatar from "./avatar.svg";
 import "../components/DoctorRegister.css";
 import DocUserContext from "../context/DocUserContext";
+import { useHistory } from "react-router-dom";
 
 const DoctorRegister = () => {
   const context = useContext(DocUserContext);
   const { addDoctor } = context;
+  let history = useHistory();
+
 
   const [docReg, setdocReg] = useState({
+    name:"",
     experience: "",
     designation: "",
     working: "",
   });
   const handleClick = (e) => {
     e.preventDefault();
-    addDoctor(docReg.experience, docReg.designation, docReg.working);
+    addDoctor(docReg.name,docReg.experience, docReg.designation, docReg.working);
+    history.push('/doctors')
     console.log(docReg.experience);
   };
   const onChange = (e) => {
@@ -27,6 +32,24 @@ const DoctorRegister = () => {
           <form action="index.html">
             <img src={avatar} alt="hai" />
             <h2 className="title">REGISTRATION</h2>
+            <div className="input-div one">
+              <div className="i">
+                <i
+                  className="fas fa-dumbbell"
+                  style={{ fontSize: "25px", color: "blue" }}
+                ></i>
+              </div>
+              <div className="div">
+                <input
+                  type="text"
+                  className="input"
+                  id="name"
+                  name="name"
+                  onChange={onChange}
+                  placeholder="Name"
+                />
+              </div>
+            </div>
             <div className="input-div one">
               <div className="i">
                 <i

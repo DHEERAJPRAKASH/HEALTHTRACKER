@@ -44,6 +44,7 @@ const upload = multer({
 
 router.get("/fetchuserdetails", fetchuser, async (req, res) => {
   try {
+    console.log("from server getuser:"+req.user.id)
     const detailuser = await DetailUsers.find({ user: req.user.id });
 
     console.log(detailuser);
@@ -97,6 +98,7 @@ router.post(
       // added on 10/01/2022
       
       const {
+        name,
         worknature,
         exercisedaily,
         eatingdiet,
@@ -118,13 +120,14 @@ router.post(
       console.log("mimetype:"+mimetype);
       console.log("fresher")
       console.log("image:"+req.files.userImage);
-
+      console.log("name:"+req.user);
       console.log("path of file: "+req.files.userImage.path);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
       const userdet = new DetailUsers({
         user: req.user.id,
+        name,
         worknature,
         exercisedaily,
         eatingdiet,
@@ -163,6 +166,7 @@ router.post(
 //ROUTE 3 - Logged in  user details updating details : GET "/api/userdetails/updateuser.LOGIN REQUIRED
 router.put("/updateuser/:id", fetchuser, async (req, res) => {
   const {
+    name,
     worknature,
     exercisedaily,
     eatingdiet,
@@ -180,10 +184,13 @@ router.put("/updateuser/:id", fetchuser, async (req, res) => {
     //Create a newUser object
     const newUser = {};
     //validate and check which field is available and update accordingly
+    if (name) {
+      newUser.worknature = name;
+    }
     if (worknature) {
       newUser.worknature = worknature;
     }
-
+   
     newUser.exercisedaily = exercisedaily;
     newUser.eatingdiet = eatingdiet;
     newUser.alcoholconsumption = alcoholconsumption;
@@ -256,6 +263,7 @@ router.post(
   // upload.single('userImage'),
   [
     // body("dob", "Enter a valid DateofBirth").isDate(),
+    body("name", "Enter a valid name").isLength({ min: 3 }),
     body("worknature", "Enter a valid worknature").isLength({ min: 4 }),
     body("exercisedaily", "Enter a valid value for exercise daily").isBoolean(),
     body("eatingdiet", "Enter a valid value for eating diet").isBoolean(),
@@ -291,6 +299,7 @@ router.post(
       // added on 10/01/2022
       
       const {
+        name,
         doctor,
         worknature,
         exercisedaily,
@@ -320,6 +329,7 @@ router.post(
       const userdet = new UploadUsers({
         user: req.user.id,
         doctor,
+        name,
         worknature,
         exercisedaily,
         eatingdiet,

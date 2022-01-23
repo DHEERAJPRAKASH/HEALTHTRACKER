@@ -10,6 +10,7 @@ import UserRegister from "./pages/UserRegister";
 import DoctorRegister from "./pages/DoctorRegister";
 import UserComplaints from "./pages/UserComplaints";
 import DoctorConsult from "./pages/DoctorConsult";
+import Tailwindy from "./pages/Tailwindy";
 
 import DocUserState from "./context/DocUserState";
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/userRegister" component={UserRegister} />
             <Route path="/userComplaints" component={UserComplaints} />
             <Route path="/doctorConsult" component={DoctorConsult} />
+            <Route path="/tailwind" component={Tailwindy} />
           </Switch>
         </Router>
       </DocUserState>

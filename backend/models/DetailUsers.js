@@ -6,6 +6,11 @@ const DetailUserSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'user'
     },
+    name:{
+        type: String,
+        required: true
+
+    },
     worknature:{
         type: String,
         required: true

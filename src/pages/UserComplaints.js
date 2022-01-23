@@ -16,7 +16,7 @@ function UserComplaints() {
     setuserReg( e.target.value );
     console.log(userReg);
     console.log(user);
-    console.log(user[0].worknature);
+    // console.log(user[0].worknature);
     console.log(doctorId);
 
   };
@@ -35,6 +35,7 @@ function UserComplaints() {
   const handleSubmit = (e)=>{
     // console.log(userDetail.userImage);
     const formData = new FormData();
+    formData.append("name",user[0].name);
     formData.append("worknature", user[0].worknature);
     formData.append("exercisedaily", user[0].exercisedaily);
     formData.append("eatingdiet",user[0].eatingdiet);

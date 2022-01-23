@@ -10,6 +10,10 @@ const UploadDetailSchema = new Schema({
         type:String,
         required:true
     },
+    name:{
+        type:String,
+        required:true
+    },
     worknature:{
         type: String,
         required: true

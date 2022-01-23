@@ -7,6 +7,11 @@ const DetailDoctorSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'doctor'
     },
+    name:{
+        type: String,
+        required: true
+
+    },
     experience:{
         type: String,
         required: true

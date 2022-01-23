@@ -55,7 +55,7 @@ function Signup() {
         let data = await response.data;
         console.log("data is :" + data.authtoken);
         localStorage.setItem("token", data.authtoken);
-        history.push("/");
+        history.push("/userRegister");
       }
       if (responseNotOK) {
         alert("Invalid credentials");
@@ -88,7 +88,7 @@ function Signup() {
         let data = await response.data;
         console.log("data is :" + data.authtoken);
         localStorage.setItem("token", data.authtoken);
-        history.push("/");
+        history.push("/doctorRegister");
       }
     }
   };

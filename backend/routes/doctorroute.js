@@ -36,13 +36,14 @@ router.post(
   fetchdoctor,
   [
     // body("dob", "Enter a valid DateofBirth").isDate(),
+    body("name", "Enter a valid Name").isLength({ min: 3 }),
     body("experience", "Enter a valid experience").isLength({ min: 4 }),
     body("designation", "Enter a valid designation").isLength({ min: 3 }),
     body("working", "Enter a valid working").isLength({ min: 3 }),
   ],
   async (req, res) => {
     try {
-      const { experience, designation, working } = req.body;
+      const { name,experience, designation, working } = req.body;
       //if there are errors, return bad request
       const errors = validationResult(req);
 
@@ -52,6 +53,7 @@ router.post(
       //   console.log(req.doctor.id);
       const doctordet = new DetailDoctors({
         doctor: req.doctor.id,
+        name,
         experience,
         designation,
         working,
@@ -71,12 +73,15 @@ router.post(
 
 //ROUTE 3 - Logged in  user details updating details : GET "/api/userdetails/updateuser.LOGIN REQUIRED
 router.put("/updatedoctor/:id", fetchdoctor, async (req, res) => {
-  const { experience, designation, working } = req.body;
+  const { name,experience, designation, working } = req.body;
 
   try {
     //Create a newUser object
     const newDoctor = {};
     //validate and check which field is available and update accordingly
+    if (name) {
+      newDoctor.name = name;
+    }
     if (experience) {
       newDoctor.experience = experience;
     }
@@ -140,6 +145,7 @@ router.get(
   // upload.single('userImage'),
   [
     // body("dob", "Enter a valid DateofBirth").isDate(),
+    body("name", "Enter a valid Name").isLength({ min: 3 }),
     body("worknature", "Enter a valid worknature").isLength({ min: 4 }),
     body("exercisedaily", "Enter a valid value for exercise daily").isBoolean(),
     body("eatingdiet", "Enter a valid value for eating diet").isBoolean(),
@@ -175,6 +181,7 @@ router.get(
       // added on 10/01/2022
 
       const {
+        name,
         worknature,
         exercisedaily,
         eatingdiet,
@@ -199,6 +206,7 @@ router.get(
       }
       const userdet = new UploadUsers({
         user: req.user.id,
+        name,
         worknature,
         exercisedaily,
         eatingdiet,
@@ -227,9 +235,13 @@ router.get(
 router.get("/fetchconsult", fetchdoctor, async (req, res) => {
   try {
     const doctor = req.doctor.id;
-    console.log(doctor.toString());
+    console.log(req.doctor);
+    // console.log("Doctor id:"+doctor.toString());
+    const doc = doctor.toString();
+    console.log("Doctor id:"+doc);
     const detaildoctor = await UploadUsers.find({ doctor: req.doctor.id });
-
+    // const detaildoctor = await UploadUsers.find({ doctor: "61ece8918604f561b005a7cf" });
+    console.log(detaildoctor);
     res.json([detaildoctor]);
   } catch (error) {
     console.error(error.message);
@@ -239,6 +251,7 @@ router.get("/fetchconsult", fetchdoctor, async (req, res) => {
 
 router.put("/fetchconsult/:id", fetchdoctor, async (req, res) => {
   const {
+    name,
     worknature,
     exercisedaily,
     eatingdiet,
@@ -258,6 +271,9 @@ router.put("/fetchconsult/:id", fetchdoctor, async (req, res) => {
     const newUser = {};
     console.log("I am id:"+req.params.id)
     //validate and check which field is available and update accordingly
+    if (name) {
+      newUser.name = name;
+    }
     if (worknature) {
       newUser.worknature = worknature;
     }

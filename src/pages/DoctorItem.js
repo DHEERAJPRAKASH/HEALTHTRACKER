@@ -9,8 +9,10 @@ function DoctorItem(props) {
   const { deleteDoctor } = context;
   let history = useHistory();
   const handleConsult = (e)=>{
-    const a = sessionStorage.setItem('doctorId',doctor._id);
-    console.log(a);
+    const a = sessionStorage.setItem('doctorId',doctor.doctor);
+    const b = sessionStorage.getItem('doctorId');
+    console.log("doctor id:"+b);
+    history.push("/userComplaints");
   }
  
   return (
@@ -18,13 +20,15 @@ function DoctorItem(props) {
       <Col>
         <Card className="mx-auto my-5 " style={{ width: "18rem" }}>
           <Card.Body>
+            <Card.Title>{doctor.name}</Card.Title>
             <Card.Title>{doctor.experience}</Card.Title>
             <Card.Text>{doctor.designation}</Card.Text>
             <Card.Text>{doctor.working}</Card.Text>
             <Button
               variant="danger"
               onClick={() => {
-                deleteDoctor(doctor._id);
+                alert("Doctor id:"+doctor.doctor)
+                //deleteDoctor(doctor._id);
               }}
             >
               DELETE

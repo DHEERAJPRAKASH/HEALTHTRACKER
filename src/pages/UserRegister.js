@@ -20,6 +20,7 @@ const UserRegister = () => {
   const checkbox5 = useCheckboxState();
 
   const [userReg, setuserReg] = useState({
+    name:"",
     worknature: "",
     othercomments: "",
     list_of_drug_allergies: "",
@@ -53,6 +54,7 @@ const UserRegister = () => {
     console.log(path + " is path");
 
     const formData = new FormData();
+    formData.append("name", userReg.name);
     formData.append("worknature", userReg.worknature);
     formData.append("exercisedaily", checkbox1.state);
     formData.append("eatingdiet", checkbox2.state);
@@ -71,32 +73,32 @@ const UserRegister = () => {
       console.log(pair[0]+ ', ' + pair[1]); 
   }
     //Add User
-    console.log("file path: " +path);
+    // console.log("file path: " +path);
 
-    let url = "http://localhost:5000/api/userdetails/adduser";
-    let options = {
-      method: "POST",
-      url: url,
-      headers: {
-        // "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiODNkMTQ1NzNiYzg0Y2FjMWE2N2I0In0sImlhdCI6MTY0MTgyMTI4M30.KQnknF95JTsFUcRxPKL68kc0duDK-NfC1kcr3aDyMVY",
-      },
-      data: formData ,
-    };
-    let response = axios(options);
+    // let url = "http://localhost:5000/api/userdetails/adduser";
+    // let options = {
+    //   method: "POST",
+    //   url: url,
+    //   headers: {
+    //     // "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+    //     "auth-token":
+    //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiODNkMTQ1NzNiYzg0Y2FjMWE2N2I0In0sImlhdCI6MTY0MTgyMTI4M30.KQnknF95JTsFUcRxPKL68kc0duDK-NfC1kcr3aDyMVY",
+    //   },
+    //   data: formData ,
+    // };
+    // let response = axios(options);
 
-    let responseOK =
-      response && response.status === 200 && response.statusText === "OK";
-    if (responseOK) {
-      let data = response.data;
-      console.log("success");
-      alert("success");
-      setuser(user.concat(data));
-    }
+    // let responseOK =
+    //   response && response.status === 200 && response.statusText === "OK";
+    // if (responseOK) {
+    //   let data = response.data;
+    //   console.log("success");
+    //   alert("success");
+    //   setuser(user.concat(data));
+    // }
     
 
-    // addUser();
+    addUser(formData);
   };
 
   const onChange = (e) => {
@@ -110,7 +112,25 @@ const UserRegister = () => {
             <img src={avatar} alt="hai" />
             <h2 className="title">REGISTRATION</h2>
 
-            
+            <div className="input-div one">
+            <div className="i">
+              <i
+                className="fas fa-dumbbell"
+                style={{ fontSize: "25px", color: "blue" }}
+              ></i>
+            </div>
+            <div className="div">
+              <input
+                type="text"
+                className="input"
+                id="Name"
+                name="name"
+                value={userReg.name}
+                onChange={onChange}
+                placeholder="Name"
+              />
+            </div>
+            </div>
               <div className="input-div one">
                 <div className="i">
                   <i

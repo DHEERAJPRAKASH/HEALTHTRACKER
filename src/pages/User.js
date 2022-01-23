@@ -33,6 +33,7 @@ function Doctor() {
   const refClose = useRef(null);
   const [doctors, setDoctor] = useState({
     id: "",
+    ename:"",
     eexperience: "",
     edesignation: "",
     eworking: "",
@@ -42,6 +43,7 @@ function Doctor() {
     ref.current.click();
     setDoctor({
       id: currentdoctor._id,
+      ename:currentdoctor.name,
       eexperience: currentdoctor.experience,
       edesignation: currentdoctor.designation,
       eworking: currentdoctor.working,
@@ -51,6 +53,7 @@ function Doctor() {
   const handleClick = (e) => {
     editDoctor(
       doctors.id,
+      doctors.ename,
       doctors.eexperience,
       doctors.edesignation,
       doctors.eworking
@@ -64,7 +67,7 @@ function Doctor() {
   };
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "auto" }}>
+    <div style={{ overflowY: "scroll", maxHeight: "800px" }}>
       <Container fluid="md">
         <h1>DOCTORS</h1>
 
@@ -84,6 +87,15 @@ function Doctor() {
           </Modal.Header>
           <Modal.Body>
             Update your Profile if there is any changes has to be performed.
+            <Form.Group className="mb-3">
+              <Form.Label style={{fontWeight: "bold"}}>Name:</Form.Label>
+
+              <Form.Control id="ename"
+              name="ename"
+              value={doctors.ename}
+              onChange={onChange}
+              placeholder="Name" />
+            </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label style={{fontWeight: "bold"}}>Experience:</Form.Label>
 

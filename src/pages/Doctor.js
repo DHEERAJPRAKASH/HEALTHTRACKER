@@ -10,10 +10,11 @@ import DoctorRegister from "./DoctorRegister";
 function Doctor() {
   const context = useContext(DocUserContext);
   let history = useHistory();
-  const { doctorComments } = context;
+  const { doctorComments, doctorConsult } = context;
   useEffect(() => {
     if (localStorage.getItem("token")) {
       // getDoctor();
+      // doctorConsult();
     } else {
       history.push("/login");
     }
@@ -44,8 +45,10 @@ function Doctor() {
     console.log(currentUser);
     console.log("user:" + user);
     const userId = id;
-    console.log("userId:"+userId);
+    console.log("userId:" + userId);
+    alert("username:" + currentUser.name);
     const formData = new FormData();
+    formData.append("name", currentUser.name);
     formData.append("worknature", currentUser.worknature);
     formData.append("exercisedaily", currentUser.exercisedaily);
     formData.append("eatingdiet", currentUser.eatingdiet);
@@ -70,7 +73,7 @@ function Doctor() {
     for (var pair of formData.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
-    doctorComments(userId, formData)
+    doctorComments(userId, formData);
   };
 
   // const onChange = (e) => {
@@ -82,15 +85,17 @@ function Doctor() {
   };
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "auto" }}>
+    <div style={{ overflowY: "scroll", maxHeight: "700px" }}>
+    
       <Container fluid="md">
-        <h1>DOCTORS</h1>
-
+        
+          <h1 style={{textAlign: "center",padding: "2rem"}}>DOCTORS</h1>
+          
         <Button
           ref={ref}
           variant="primary"
           onClick={handleShow}
-          style={{ display: "" }}
+          style={{ display: "none" }}
         >
           Launch static backdrop modal
         </Button>
@@ -134,8 +139,8 @@ function Doctor() {
           handleSubmit={handleSubmit}
         ></DoctorConsult>
 
-        <DoctorRegister></DoctorRegister>
       </Container>
+
     </div>
   );
 }
@@ -152,4 +157,5 @@ export default Doctor;
               />
             );
           })}
-        </Row> */
+        </Row> 
+        <DoctorRegister></DoctorRegister>*/

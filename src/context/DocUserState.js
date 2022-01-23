@@ -2,12 +2,15 @@ import { useState} from "react";
 import DocUserContext from "./DocUserContext";
 import axios from "axios";
 
+
 const DocUserState = (props) => {
   const host = "http://localhost:5000";
   const doctorInitial = [];
   const [doctor, setdoctor] = useState(doctorInitial);
   const userInitial = [];
   const [user, setuser] = useState(userInitial);
+  
+
   const getDoctor = async () => {
     {
       let url = "http://localhost:5000/api/doctordetails/fetchdoctordetails";
@@ -51,6 +54,7 @@ const DocUserState = (props) => {
         response && response.status === 200 && response.statusText === "OK";
       if (responseOK) {
         let data = await response.data;
+        console.log(data);
         setdoctor(...data);
       }
     };
@@ -58,7 +62,7 @@ const DocUserState = (props) => {
 
   // Add Doctor
   
-  const addDoctor = async (experience, designation, working) => {
+  const addDoctor = async (name,experience, designation, working) => {
     let url = "http://localhost:5000/api/doctordetails/adddoctor";
     let options = {
       method: "POST",
@@ -70,6 +74,7 @@ const DocUserState = (props) => {
           localStorage.getItem('token'),
       },
       data: {
+        name:name,
         experience: experience,
         designation: designation,
         working: working,
@@ -111,7 +116,7 @@ const DocUserState = (props) => {
     };
   };
   // Edit Doctor
-  const editDoctor = async (id, experience, designation, working) => {
+  const editDoctor = async (id, name,experience, designation, working) => {
     
     let url = `${host}/api/doctordetails/updatedoctor/${id}`;
     let options = {
@@ -124,6 +129,7 @@ const DocUserState = (props) => {
           localStorage.getItem('token'),
       },
       data: {
+        name:name,
         experience: experience,
         designation: designation,
         working: working,
@@ -179,7 +185,7 @@ const DocUserState = (props) => {
   }
 
   //Add User
-  const addUser = async (experience, designation, working) => {
+  const addUser = async (formData) => {
     let url = "http://localhost:5000/api/userdetails/adduser";
     let options = {
       method: "POST",
@@ -189,11 +195,7 @@ const DocUserState = (props) => {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem('token'),
       },
-      data: {
-        experience: experience,
-        designation: designation,
-        working: working,
-      },
+      data: formData,
     };
     let response = await axios(options);
     let responseOK =
@@ -290,6 +292,7 @@ const DocUserState = (props) => {
         response && response.status === 200 && response.statusText === "OK";
       if (responseOK) {
         let data = await response.data;
+        console.log("from doctorConsult:"+data)
         setdoctor(...data);
       }
     };
